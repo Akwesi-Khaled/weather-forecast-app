@@ -52,4 +52,4 @@ if mode == "Current Weather":
             st.image(f"https:{data['current']['condition']['icon']}", width=80)
             st.metric("Temperature (°C)", data['current']['temp_c'])
             st.metric("Feels Like (°C)", data['current']['feelslike_c'])
-            st.write(f"**Condition:** {data['current']['condition']['text']
+            st.write(f"**Condition:** {data['current']['condition']['text'])
