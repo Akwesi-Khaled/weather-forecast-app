@@ -52,4 +52,47 @@ if mode == "Current Weather":
             st.image(f"https:{data['current']['condition']['icon']}", width=80)
             st.metric("Temperature (°C)", data['current']['temp_c'])
             st.metric("Feels Like (°C)", data['current']['feelslike_c'])
-            st.write(f"**Condition:** {data['current']['condition']['text'])
+            st.write(f"**Condition:** {data['current']['condition']['text']}")
+            st.write(f"**Humidity:** {data['current']['humidity']}%")
+            st.write(f"**Wind Speed:** {data['current']['wind_kph']} kph")
+            st.write(f"**Location:** {data['location']['name']}, {data['location']['country']}")
+
+# -----------------------------
+# MODE: FORECAST
+# -----------------------------
+elif mode == "Forecast":
+    st.subheader("📅 3-Day Weather Forecast")
+    days = st.slider("Select number of days:", 1, 7, 3)
+    if st.button("Get Forecast"):
+        params = {"q": city, "days": days}
+        data = fetch_data("forecast.json", params)
+        if data:
+            for day in data["forecast"]["forecastday"]:
+                st.markdown(f"### {day['date']}")
+                st.image(f"https:{day['day']['condition']['icon']}", width=80)
+                st.metric("Avg Temp (°C)", day["day"]["avgtemp_c"])
+                st.write(f"Condition: {day['day']['condition']['text']}")
+                st.write(f"Max Temp: {day['day']['maxtemp_c']}°C | Min Temp: {day['day']['mintemp_c']}°C")
+                st.divider()
+
+# -----------------------------
+# MODE: HISTORICAL
+# -----------------------------
+elif mode == "Historical":
+    st.subheader("🕰 Historical Weather Data")
+    selected_date = st.date_input(
+        "Select Date:",
+        value=date.today() - timedelta(days=1),
+        max_value=date.today() - timedelta(days=1)
+    )
+    if st.button("Get Historical Weather"):
+        params = {"q": city, "dt": selected_date.strftime("%Y-%m-%d")}
+        data = fetch_data("history.json", params)
+        if data:
+            hist = data["forecast"]["forecastday"][0]
+            st.markdown(f"### {hist['date']}")
+            st.image(f"https:{hist['day']['condition']['icon']}", width=80)
+            st.metric("Avg Temp (°C)", hist["day"]["avgtemp_c"])
+            st.write(f"Condition: {hist['day']['condition']['text']}")
+            st.write(f"Max Temp: {hist['day']['maxtemp_c']}°C | Min Temp: {hist['day']['mintemp_c']}°C")
+            st.write(f"Total Precipitation: {hist['day']['totalprecip_mm']} mm")
