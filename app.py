@@ -13,7 +13,7 @@ st.write("Using WeatherAPI.com via RapidAPI")
 city = st.text_input("Enter city name:", "Accra")
 
 if st.button("Get Weather"):
-    url = f"https://{RAPIDAPI_HOST}/current.json"
+    url = f"https://{RAPIDAPI_HOST}/timezone.json"
     querystring = {"q": city}
     headers = {
         "X-RapidAPI-Key": RAPIDAPI_KEY,
